@@ -31,4 +31,8 @@ router.get(
   "/related-product/:pid/:cid",
   productcontroller.realtedProductController
 );
+router.get(
+  "/product-category/:slug",
+  productcontroller.productCategoryController
+);
 module.exports = router;

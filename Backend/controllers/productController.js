@@ -1,4 +1,5 @@
 const productModel = require("../models/productModel");
+const categorymodel = require("../models/categoryModel");
 const fs = require("fs");
 const slugify = require("slugify");
 const createProductController = async (req, res) => {
@@ -268,6 +269,24 @@ const realtedProductController = async (req, res) => {
     });
   }
 };
+//
+const productCategoryController = async (req, res) => {
+  try {
+    const category = await categorymodel.findOne({ slug: req.params.slug });
+    const products = await productModel.find({ category }).populate("category");
+    res.status(200).send({
+      success: true,
+      category,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error con al obtener los Productos",
+    });
+  }
+};
 module.exports = {
   createProductController,
   getProductController,
@@ -280,4 +299,5 @@ module.exports = {
   productListcontroller,
   searchProductControllers,
   realtedProductController,
+  productCategoryController,
 };
