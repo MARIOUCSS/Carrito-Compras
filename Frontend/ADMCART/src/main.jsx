@@ -5,12 +5,15 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { Global } from "./Context/context.jsx";
 import { GlobalB } from "./Context/search.jsx";
+import { GlobalCart } from "./Context/Cart.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Global>
     <GlobalB>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <GlobalCart>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </GlobalCart>
     </GlobalB>
   </Global>
 );

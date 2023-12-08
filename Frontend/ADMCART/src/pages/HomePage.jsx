@@ -7,8 +7,13 @@ import { Link, json } from "react-router-dom";
 import { Checkbox, Radio } from "antd";
 import { prices } from "../componets/Routes/Prices";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../Context/Cart";
+import toast from "react-hot-toast";
 function HomePage() {
   //const { prueba } = useauth();
+  const [cart, setCart] = useCart();
+  //esto lo carga
+  //
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -165,7 +170,20 @@ function HomePage() {
                     >
                       More Details
                     </button>
-                    <button className="btn btn-secondary ms-1">
+                    <button
+                      className="btn btn-secondary ms-1"
+                      onClick={() => {
+                        setCart([...cart, product]);
+
+                        //despues de añadir el localstorage nos vamos al context*car
+                        //para el useefect
+                        localStorage.setItem(
+                          "cart",
+                          JSON.stringify([...cart, product])
+                        );
+                        toast.success("Item Add to Cart");
+                      }}
+                    >
                       Add TO CART
                     </button>
                   </div>

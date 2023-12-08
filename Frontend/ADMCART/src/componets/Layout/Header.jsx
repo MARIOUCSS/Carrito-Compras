@@ -2,10 +2,13 @@ import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
 import { useauth } from "../../Context/context";
+import { useCart } from "../../Context/Cart";
 import SearchImput from "../Form/SearchImput";
 import useCategory from "../../hooks/useCategory";
+import { Badge } from "antd";
 function Header() {
   const { prueba, MostrarUsuario } = useauth();
+  const [cart] = useCart();
   //esto va retornar un array es == const pp=[];
   const categories = useCategory();
   const Logearse = () => {
@@ -115,9 +118,11 @@ function Header() {
               )}
 
               <li className="nav-item">
-                <NavLink to="/cart" className="nav-link" href="#">
-                  Cart(0)
-                </NavLink>
+                <Badge count={cart?.length} showZero>
+                  <NavLink to="/cart" className="nav-link">
+                    Cart
+                  </NavLink>
+                </Badge>
               </li>
             </ul>
           </div>
