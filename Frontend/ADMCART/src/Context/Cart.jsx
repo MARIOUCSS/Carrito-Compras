@@ -6,7 +6,12 @@ import React, {
   useState,
 } from "react";
 import axios from "axios";
-
+///Modificacion
+// const ARRAYINICIAL = {
+//   Carrito: [],
+//   carttotalcanti: 0,
+//   carttotalmonto: 0,
+// };
 export const Cartcontext = createContext();
 
 export const useCart = () => {

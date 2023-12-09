@@ -15,6 +15,13 @@ function Header() {
     MostrarUsuario(null, "");
     localStorage.removeItem("auth");
   };
+  const cantidad = () => {
+    const cartm = [...cart];
+    const total = cartm.reduce((ac, x) => {
+      return ac + x.cantidad;
+    }, 0);
+    return total;
+  };
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -118,7 +125,7 @@ function Header() {
               )}
 
               <li className="nav-item">
-                <Badge count={cart?.length} showZero>
+                <Badge count={cantidad()} showZero>
                   <NavLink to="/cart" className="nav-link">
                     Cart
                   </NavLink>

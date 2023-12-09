@@ -8,12 +8,20 @@ function Cartpages() {
   const [cart, setCart] = useCart();
   const { prueba } = useauth();
   const navigate = useNavigate();
-
+  const TotalPagar = () => {
+    //falta añadir la cantidad para poder multiplicar ojo con eso
+    const cartm = [...cart];
+    const total = cartm.reduce((ac, x) => {
+      const productT = x.product.price * x.cantidad;
+      return ac + productT;
+    }, 0);
+    return total;
+  };
   const removeItem = (id) => {
     try {
       const carr = [...cart];
 
-      const carf = carr.filter((x) => x._id !== id);
+      const carf = carr.filter((x) => x.product._id !== id);
       //console.log(carf);
       setCart(carf);
       localStorage.setItem("cart", JSON.stringify(carf));
@@ -42,10 +50,10 @@ function Cartpages() {
           <div className="col-md-9">
             {cart?.map((x) => (
               <div className="row  card flex-row">
-                <div className="col-md-4 mt-2">
+                <div className="col-md-4 mt-2" key={x._id}>
                   <img
-                    src={`${url}/api/v1/product/product-photo/${x._id}`}
-                    alt={x.name}
+                    src={`${url}/api/v1/product/product-photo/${x.product._id}`}
+                    alt={x.product.name}
                     className="card-img-top"
                     width="100px"
                     height={"100px"}
@@ -53,12 +61,13 @@ function Cartpages() {
                   />
                 </div>
                 <div className="col-md-8">
-                  <p>{x.name}</p>
-                  <p>{x.description}</p>
-                  <p>Price :{x.price}</p>
+                  <p>{x.product.name}</p>
+                  <p>{x.product.description}</p>
+                  <p>Price :{x.product.price}</p>
+                  <p>Cantidad :{x.cantidad}</p>
                   <button
                     className="btn btn-danger mb-2"
-                    onClick={() => removeItem(x._id)}
+                    onClick={() => removeItem(x.product._id)}
                   >
                     Remove
                   </button>
@@ -70,7 +79,7 @@ function Cartpages() {
             <h2>Cart Sumary</h2>
             <p>Total|Checkout|Payment</p>
             <hr />
-            <h4>Total :</h4>
+            <h4>Total :{TotalPagar()}</h4>
           </div>
         </div>
       </div>

@@ -23,6 +23,20 @@ function HomePage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  const AddCart = (pro) => {
+    //estas insertando el pro id
+    const existingproduct = cart.findIndex((x) => x.product._id === pro._id);
+    if (existingproduct !== -1) {
+      const updatec = [...cart];
+      updatec[existingproduct].cantidad += 1;
+      setCart(updatec);
+      localStorage.setItem("cart", JSON.stringify(updatec));
+    } else {
+      setCart([...cart, { product: pro, cantidad: 1 }]);
+      JSON.stringify([...cart, { product: pro, cantidad: 1 }]);
+    }
+    toast.success("Item Added to Cart");
+  };
   const handleFilter = (value, id) => {
     //copiamos todo lo que tiene el checked
     let all = [...checked]; //empieza desde[]
@@ -172,17 +186,7 @@ function HomePage() {
                     </button>
                     <button
                       className="btn btn-secondary ms-1"
-                      onClick={() => {
-                        setCart([...cart, product]);
-
-                        //despues de añadir el localstorage nos vamos al context*car
-                        //para el useefect
-                        localStorage.setItem(
-                          "cart",
-                          JSON.stringify([...cart, product])
-                        );
-                        toast.success("Item Add to Cart");
-                      }}
+                      onClick={() => AddCart(product)}
                     >
                       Add TO CART
                     </button>
