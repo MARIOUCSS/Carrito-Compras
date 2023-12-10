@@ -21,7 +21,7 @@ function Dashboard() {
         </div>
       </div>
 
-      <h1>Dashboard Page</h1>
+      <h1>Dashboarsd Page</h1>
     </Layout>
   );
 }
