@@ -38,8 +38,11 @@ export const Global = (props) => {
   const MostrarUsuario = (us, tok) => {
     dispatch({ type: "MostrarU", payload: { user: us, token: tok } });
   };
+  const actualizarus = (us) => {
+    dispatch({ type: "Actualizaru", payload: { user: us } });
+  };
   return (
-    <Registro.Provider value={{ prueba: state, MostrarUsuario }}>
+    <Registro.Provider value={{ prueba: state, MostrarUsuario, actualizarus }}>
       {props.children}
     </Registro.Provider>
   );

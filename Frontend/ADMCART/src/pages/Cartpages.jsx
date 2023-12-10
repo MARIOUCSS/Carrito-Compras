@@ -80,6 +80,45 @@ function Cartpages() {
             <p>Total|Checkout|Payment</p>
             <hr />
             <h4>Total :{TotalPagar()}</h4>
+            {/* si hay user con direccion sino te muestra lo de bajo por no ha nada */}
+            {prueba?.user?.address ? (
+              <>
+                <div className="mb-3">
+                  <h4>Current Address</h4>
+                  <h5>{prueba?.user.address}</h5>
+                  <button
+                    className="btn btn-outline-warning"
+                    onClick={() => navigate("/dashboard/user/profile")}
+                  >
+                    Update Address
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="mb-3">
+                {/* si prueba .token te muestra el update sino el login check */}
+                {prueba?.token ? (
+                  <button
+                    className="btn btn-outline-warning"
+                    onClick={() => navigate("/dashboard/ser/profile")}
+                  >
+                    UPDATE
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-outline-warning"
+                    onClick={() =>
+                      navigate("/login", {
+                        //te vas a login te logueas y te va a /cart
+                        state: "/cart",
+                      })
+                    }
+                  >
+                    Please Login to Checkout
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const registerControllers = require("../controllers/authController");
 const authmidle = require("../middlewares/authMidleware");
+
 //routing
 
 router.post("/register", registerControllers.registerController);
@@ -23,4 +24,9 @@ router.get("/user-auth", authmidle.requiresignIn, (req, res) => {
 router.get("/admin-auth", authmidle.requiresignIn, (req, res) => {
   res.status(200).send({ ok: true });
 });
+router.put(
+  "/profile",
+  authmidle.requiresignIn,
+  registerControllers.updateProfile
+);
 module.exports = router;

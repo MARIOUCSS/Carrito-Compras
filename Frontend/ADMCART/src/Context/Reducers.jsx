@@ -6,5 +6,10 @@ export function Reducers(state, action) {
         user: action.payload.user,
         token: action.payload.token,
       };
+    case "Actualizaru":
+      return {
+        ...state,
+        user: action.payload.user,
+      };
   }
 }

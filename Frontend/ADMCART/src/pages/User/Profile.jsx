@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useauth } from "../../Context/context";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { url } from "../Auth/auth";
 function Profile() {
-  const { prueba, MostrarUsuario } = useauth();
+  const { prueba, MostrarUsuario, actualizarus } = useauth();
   const navigate = useNavigate();
   //state
   const [email, setEmail] = useState("");
@@ -19,13 +20,22 @@ function Profile() {
   const onsubmitR = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${url}/api/v1/auth/register`, {
+      const res = await axios.put(`${url}/api/v1/auth/profile`, {
         name,
         email,
         password,
         phone,
         address,
       });
+
+      if (res.data?.success) {
+        actualizarus(res.data?.updateuser);
+        let ls = localStorage.getItem("auth");
+        ls = JSON.parse(ls);
+        ls.user = res.data.updateuser;
+        localStorage.setItem("auth", JSON.stringify(ls));
+        toast.success("Profile Update Successfuly");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -65,6 +75,7 @@ function Profile() {
                     value={email}
                     onChange={(e) => setEmail(e.value)}
                     disabled
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -72,7 +83,9 @@ function Profile() {
                     type="password"
                     class="form-control"
                     placeholder="Enter Your Password"
+                    value={password}
                     onChange={(e) => setPassword(e.value)}
+                    required
                   />
                 </div>
                 <div class="mb-3">
