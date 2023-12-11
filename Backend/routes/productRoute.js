@@ -35,4 +35,13 @@ router.get(
   "/product-category/:slug",
   productcontroller.productCategoryController
 );
+//payment routes
+//token
+router.get("/braintree/token", productcontroller.braintreeTokenController);
+//payment
+router.post(
+  "/braintree/payment",
+  requiresignIn,
+  productcontroller.braintreeTreePymentController
+);
 module.exports = router;

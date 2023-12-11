@@ -28,7 +28,9 @@ function HomePage() {
     const existingproduct = cart.findIndex((x) => x.product._id === pro._id);
     if (existingproduct !== -1) {
       const updatec = [...cart];
+      //actualizamos la cantidad
       updatec[existingproduct].cantidad += 1;
+      //lo seteamos  y a la vez lo guadamo en el localstorage
       setCart(updatec);
       localStorage.setItem("cart", JSON.stringify(updatec));
     } else {

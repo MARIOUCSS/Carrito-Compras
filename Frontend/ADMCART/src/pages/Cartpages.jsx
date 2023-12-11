@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../componets/Layout/Layout";
 import { useCart } from "../Context/Cart";
 import { useauth } from "../Context/context";
 import { useNavigate } from "react-router-dom";
 import { url } from "./Auth/auth";
+import DropIn from "braintree-web-drop-in-react";
+import axios from "axios";
 function Cartpages() {
   const [cart, setCart] = useCart();
   const { prueba } = useauth();
+  const [clientToken, setClientToken] = useState("");
+  ////
+  const [instance, setInstance] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const TotalPagar = () => {
     //falta añadir la cantidad para poder multiplicar ojo con eso
@@ -16,6 +22,13 @@ function Cartpages() {
       return ac + productT;
     }, 0);
     return total;
+  };
+  //payment
+  const handelpayment = async () => {
+    try {
+    } catch (error) {
+      console.log(error);
+    }
   };
   const removeItem = (id) => {
     try {
@@ -29,6 +42,18 @@ function Cartpages() {
       console.log(error);
     }
   };
+  //get payment gateway
+  const getToken = async () => {
+    try {
+      const res = await axios.get(`${url}/api/v1/product/braintree/token`);
+      setClientToken(res.data.clientToken);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getToken();
+  }, [prueba?.token]);
   return (
     <Layout>
       <div className="container">
@@ -80,7 +105,8 @@ function Cartpages() {
             <p>Total|Checkout|Payment</p>
             <hr />
             <h4>Total :{TotalPagar()}</h4>
-            {/* si hay user con direccion sino te muestra lo de bajo por no ha nada */}
+            {/* si hay user con direccion sino te muestra lo 
+            de bajo por no ha nada una es de usuario  y el otro es de tioken  */}
             {prueba?.user?.address ? (
               <>
                 <div className="mb-3">
@@ -119,6 +145,25 @@ function Cartpages() {
                 )}
               </div>
             )}
+            {/* payment*/}
+            <div className="mt-2">
+              <DropIn
+                options={{
+                  authorization: clientToken,
+                  paypal: {
+                    flow: "vault",
+                  },
+                }}
+                onInstance={(instance) => setInstance(instance)}
+              />
+              <button
+                className="btn btn-primary"
+                onClick={handelpayment}
+                disabled={!loading || !instance || !prueba.user?.addres}
+              >
+                Make Payment
+              </button>
+            </div>
           </div>
         </div>
       </div>
