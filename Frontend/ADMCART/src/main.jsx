@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Global } from "./Context/context.jsx";
 import { GlobalB } from "./Context/search.jsx";
 import { GlobalCart } from "./Context/Cart.jsx";
+//import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Global>
     <GlobalB>

@@ -1,18 +1,24 @@
 const productModel = require("../models/productModel");
 const categorymodel = require("../models/categoryModel");
 const ordermodel = require("../models/orderModel");
+const paypal = require("../middlewares/paypal-api");
+const Order = require("../models/orderModel.js");
 const fs = require("fs");
 const slugify = require("slugify");
 const braintree = require("braintree");
+const { urlp, PAYPAL_API } = require("../middlewares/authopaypal.js");
+// import { url } from "./Auth/auth";
+const axios = require("axios");
+//Tienes que declararlo para que leas la varibles de entorno
 const dotenv = require("dotenv");
 dotenv.config();
 //Payment gateway
-var gateway = new braintree.BraintreeGateway({
-  environment: braintree.Environment.Sandbox,
-  merchantId: process.env.BRAINTREE_MERCHANT_ID,
-  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
-  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
-});
+// var gateway = new braintree.BraintreeGateway({
+//   environment: braintree.Environment.Sandbox,
+//   merchantId: process.env.BRAINTREE_MERCHANT_ID,
+//   publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+//   privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+// });
 const createProductController = async (req, res) => {
   try {
     const { name, slug, description, price, category, quantity, shipping } =
@@ -299,51 +305,55 @@ const productCategoryController = async (req, res) => {
   }
 };
 
-const braintreeTokenController = async (req, res) => {
+const createOrder = async (req, res) => {
   try {
-    gateway.clientToken.generate({}, function (err, response) {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        res.send(response);
-      }
-    });
+    // const order = await paypal.createOrderreateOrder(req.body);
+    const order = await paypal.CreateOrder1(req.body);
+    // // const { cart, cost } = req.body;
+    // // //
+    // // const productIds = cart.map((productId) => productId.product._id);
+    // // //
+    // // const newOrder = new Order({
+    // //   products: productIds,
+    // //   payment: cost,
+
+    // //   status: "Not Process",
+    // // });
+
+    ///////////////////////
+    res.json(order);
   } catch (error) {
-    console.log(error);
+    res.status(500).send(error.message);
   }
 };
-const braintreeTreePymentController = async (req, res) => {
+
+const captureOrder = async (req, res) => {
+  const { orderID, cart } = req.body;
+
   try {
-    const { cart, nonce } = req.body;
-    let total = 0;
-    cart.map((i) => {
-      total += i.price;
+    const captureData = await paypal.capturePayment(orderID);
+    const productIds = cart.map((productId) => productId.product._id);
+    const total = cart.reduce((ac, x) => {
+      const productT = x.product.price * x.cantidad;
+      return ac + productT;
+    }, 0);
+    ///////////////
+    const buyerInfo =
+      captureData && captureData.payer && captureData.payer.payer_id;
+    const newOrder = new Order({
+      products: productIds,
+      payment: total,
+      buyer: buyerInfo || "Unknown",
+      status: captureData.status,
     });
-    let newTransaction = gateway.transaction.sale(
-      {
-        amount: total,
-        paymentMethodNonce: nonce,
-        options: {
-          submitForSettlement: true,
-        },
-      },
-      function (error, result) {
-        if (result) {
-          const order = new ordermodel({
-            products: cart,
-            payment: result,
-            buyer: req.user._id,
-          }).save();
-          res.json({ ok: true });
-        } else {
-          res.status(500).send(error);
-        }
-      }
-    );
+    await newOrder.save();
+    ////////
+    res.json(captureData);
   } catch (error) {
-    console.log(error);
+    res.status(500).send(error.message);
   }
 };
+const cancelPayment = (req, res) => res.send("order created");
 module.exports = {
   createProductController,
   getProductController,
@@ -357,6 +367,25 @@ module.exports = {
   searchProductControllers,
   realtedProductController,
   productCategoryController,
-  braintreeTokenController,
-  braintreeTreePymentController,
+  // braintreeTokenController,
+  // braintreeTreePymentController,
+  createOrder,
+  captureOrder,
+  cancelPayment,
 };
+
+//ojo
+// const persona = {
+//   nombre: 'Juan',
+//   edad: 30,
+//   // dirección puede existir o no
+//   direccion: {
+//     calle: 'Calle Principal',
+//     ciudad: 'Ciudad Ejemplo',
+//     codigoPostal: '12345'
+//   }
+// };
+
+// // Acceder a la propiedad calle de la dirección (haciendo verificaciones)
+// const calle =
+//   persona && persona.direccion && persona.direccion.calle;

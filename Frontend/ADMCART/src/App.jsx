@@ -27,38 +27,49 @@ import ProductDetails from "./pages/ProductDetails";
 import Categories from "./pages/Categories";
 import CategoryProduct from "./pages/CategoryProduct";
 import Cartpages from "./pages/Cartpages";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+
 function App() {
+  const initialOptions = {
+    clientId:
+      "ASEPUa-LItO8fNHMnOL5rDPrPcb8UTyq9Nb8vk3u93E3G0KjNRByxxQGd8tPW8Bu-BPqqGTOlqomXa4e",
+    currency: "USD",
+    intent: "capture",
+    // "data-client-token": "abc",
+  };
   return (
     <>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/product/:slug" element={<ProductDetails />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/category/:slug" element={<CategoryProduct />} />
-        <Route path="/cart" element={<Cartpages />} />
-        <Route path="/dashboard" element={<PrivateRoute />}>
-          <Route path="user" element={<Dashboard />} />
-          <Route path="user/orders" element={<Orders />} />
-          <Route path="user/profile" element={<Profile />} />
-        </Route>
+      <PayPalScriptProvider options={initialOptions}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/product/:slug" element={<ProductDetails />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/category/:slug" element={<CategoryProduct />} />
+          <Route path="/cart" element={<Cartpages />} />
+          <Route path="/dashboard" element={<PrivateRoute />}>
+            <Route path="user" element={<Dashboard />} />
+            <Route path="user/orders" element={<Orders />} />
+            <Route path="user/profile" element={<Profile />} />
+          </Route>
 
-        <Route path="/dashboard" element={<PrivateRouteAdmin />}>
-          <Route path="admin" element={<Admindashboard />} />
-          <Route path="admin/create-category" element={<CreateCategory />} />
-          <Route path="admin/create-product" element={<CreateProduct />} />
-          <Route path="admin/product/:slug" element={<UpdateProduct />} />
-          <Route path="admin/products" element={<Products />} />
-          <Route path="admin/users" element={<User />} />
-        </Route>
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/policy" element={<Policy />} />
-        <Route path="*" element={<Pagenotfound />} />
-      </Routes>
+          <Route path="/dashboard" element={<PrivateRouteAdmin />}>
+            <Route path="admin" element={<Admindashboard />} />
+            <Route path="admin/create-category" element={<CreateCategory />} />
+            <Route path="admin/create-product" element={<CreateProduct />} />
+            <Route path="admin/product/:slug" element={<UpdateProduct />} />
+            <Route path="admin/products" element={<Products />} />
+            <Route path="admin/users" element={<User />} />
+          </Route>
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/policy" element={<Policy />} />
+          <Route path="*" element={<Pagenotfound />} />
+        </Routes>
+      </PayPalScriptProvider>
     </>
   );
 }

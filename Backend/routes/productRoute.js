@@ -35,13 +35,20 @@ router.get(
   "/product-category/:slug",
   productcontroller.productCategoryController
 );
-//payment routes
-//token
-router.get("/braintree/token", productcontroller.braintreeTokenController);
-//payment
-router.post(
-  "/braintree/payment",
-  requiresignIn,
-  productcontroller.braintreeTreePymentController
-);
+// //payment routes
+// //token
+// router.get("/braintree/token", productcontroller.braintreeTokenController);
+// //payment
+// router.post(
+//   "/braintree/payment",
+//   requiresignIn,
+//   productcontroller.braintreeTreePymentController
+// );
+//probando
+//crea lo qu tiene que pagar
+router.post("/create-paypal-order", productcontroller.createOrder);
+//crea la orden de pago
+router.post("/capture-paypal-order", productcontroller.captureOrder);
+//cancelar
+router.get("/cancel-order", productcontroller.cancelPayment);
 module.exports = router;

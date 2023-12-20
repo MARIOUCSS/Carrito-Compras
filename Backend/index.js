@@ -2,12 +2,18 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
+const bodyParser = require("body-parser");
+
+// Configurar body-parser con un límite de tamaño mayor, por ejemplo, 50 MB
+
 require("dotenv").config();
 //
 const app = express();
 //app.use(bodyparser.urlencoded({ extended: false }));
 //app.use(bodyparser.json());
 //
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.get("/", (req, res) => {
   res.send({
     message: "bienvenido",

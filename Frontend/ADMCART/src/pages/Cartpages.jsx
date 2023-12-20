@@ -5,13 +5,17 @@ import { useauth } from "../Context/context";
 import { useNavigate } from "react-router-dom";
 import { url } from "./Auth/auth";
 import DropIn from "braintree-web-drop-in-react";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
+import PaypalPayment from "../componets/PaypalPayment";
 function Cartpages() {
   const [cart, setCart] = useCart();
   const { prueba } = useauth();
   const [clientToken, setClientToken] = useState("");
   ////
-  const [instance, setInstance] = useState("");
+  //const [instance, setinstance] = useState(null);
+  //const [instance, setInstance] = useState(null);
+  //const [instance, setInstance] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const TotalPagar = () => {
@@ -23,13 +27,7 @@ function Cartpages() {
     }, 0);
     return total;
   };
-  //payment
-  const handelpayment = async () => {
-    try {
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   const removeItem = (id) => {
     try {
       const carr = [...cart];
@@ -42,18 +40,7 @@ function Cartpages() {
       console.log(error);
     }
   };
-  //get payment gateway
-  const getToken = async () => {
-    try {
-      const res = await axios.get(`${url}/api/v1/product/braintree/token`);
-      setClientToken(res.data.clientToken);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getToken();
-  }, [prueba?.token]);
+
   return (
     <Layout>
       <div className="container">
@@ -147,7 +134,7 @@ function Cartpages() {
             )}
             {/* payment*/}
             <div className="mt-2">
-              <DropIn
+              {/* <DropIn
                 options={{
                   authorization: clientToken,
                   paypal: {
@@ -155,11 +142,13 @@ function Cartpages() {
                   },
                 }}
                 onInstance={(instance) => setInstance(instance)}
-              />
+              /> */}
+              <PaypalPayment total={TotalPagar()} />
               <button
                 className="btn btn-primary"
-                onClick={handelpayment}
-                disabled={!loading || !instance || !prueba.user?.addres}
+                // onClick={handlePayment}
+                //disabled={!prueba.user?.address}
+                disabled={!prueba.user?.address}
               >
                 Make Payment
               </button>

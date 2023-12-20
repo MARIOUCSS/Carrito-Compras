@@ -7,15 +7,19 @@ const order = new mongoose.Schema(
         ref: "Product",
       },
     ],
-    payment: {},
+    payment: {
+      type: Number,
+    },
     buyer: {
-      type: mongoose.ObjectId,
-      ref: "Users",
+      // type: mongoose.ObjectId,
+      // ref: "Users",
+      type: String,
+      required: true,
     },
     status: {
       type: String,
-      default: "Not Process",
-      enum: ["Not Process", "Processing", "Shipped", "deliverd", "cancel"],
+      // default: "Not Process",
+      // enum: ["Not Process", "Processing", "Shipped", "deliverd", "cancel"],
     },
   },
   { timestamps: true }
