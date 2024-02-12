@@ -54,7 +54,7 @@ const ForgotPassword = () => {
             <input
               type="email"
               placeholder="Enter Your Email"
-              class="form-control"
+              className="form-control"
               onChange={(e) =>
                 setNewpassword({ ...newpassword, email: e.target.value })
               }

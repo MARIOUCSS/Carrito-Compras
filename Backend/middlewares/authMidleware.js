@@ -11,6 +11,7 @@ const requiresignIn = (req, res, next) => {
     //necesita el _id por eso rq.user=decode para
     //que tenga ese valor
     req.user = decode;
+    //req.user=_id
     next();
   } catch (error) {
     console.log(error);

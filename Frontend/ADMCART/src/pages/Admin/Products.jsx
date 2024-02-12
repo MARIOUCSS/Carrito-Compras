@@ -44,12 +44,22 @@ const Products = () => {
                     product.photo &&
                     product.photo.contentType &&
                     product.photo.data && (
+                      // <img
+                      //   src={`data:${
+                      //     product.photo.contentType
+                      //   };base64,${Buffer.from(
+                      //     product.photo.data.data
+                      //   ).toString("base64")}`}
+                      //   className="card-img-top"
+                      //   alt={product.name}
+                      // />
                       <img
-                        src={`data:${
-                          product.photo.contentType
-                        };base64,${Buffer.from(
-                          product.photo.data.data
-                        ).toString("base64")}`}
+                        src={`data:${product.photo.contentType};base64,${btoa(
+                          new Uint8Array(product.photo.data.data).reduce(
+                            (data, byte) => data + String.fromCharCode(byte),
+                            ""
+                          )
+                        )}`}
                         className="card-img-top"
                         alt={product.name}
                       />

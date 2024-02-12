@@ -105,6 +105,7 @@ function CreateCategory() {
                 setValue={setName}
               />
             </div>
+            {/* ojo */}
             <div className="w-75">
               <table class="table">
                 <thead>

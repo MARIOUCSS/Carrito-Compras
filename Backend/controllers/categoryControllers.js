@@ -1,5 +1,13 @@
 const categoryModel = require("../models/categoryModel");
 const slugify = require("slugify");
+
+// ////
+// var slugify = require('slugify')
+
+// slugify('some string') // some-string
+
+// // if you prefer something other than '-' as separator
+// slugify('some string', '_')  // some_string
 const createCategoryController = async (req, res) => {
   try {
     const { name } = req.body;
